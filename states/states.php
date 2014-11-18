@@ -98,9 +98,7 @@ echo "   (L)ist States   (S)earch State Data   Trivia (G)ame   (Q)uit    " . PHP
 echo "-----------------------------------------------------------------" . PHP_EOL;
 echo ">";
 
-$list_or_search = getInput();
-
-switch($list_or_search) {
+switch(getInput()) {
     case "L":
         echo `clear`;
         echoArray($stateDataInstance->list_of_states);
@@ -111,9 +109,7 @@ switch($list_or_search) {
         echo ">";
 
         $query = new Query();
-        $search_birds_or_capitals = getInput();
-        var_dump($search_birds_or_capitals);
-        switch($search_birds_or_capitals){
+        switch(getInput()){
             case "S":
                 echoArray($query->newQuery($stateDataInstance->list_of_states));
                 break;
