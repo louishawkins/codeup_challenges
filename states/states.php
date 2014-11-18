@@ -23,7 +23,7 @@ require_once('smart_io.php');
 include_once('state_trivia_game.php');
 
 class StateData {
-    public $states_data_file;
+    protected $states_data_file;
     public $all_state_data;
     public $list_of_states;
     public $list_of_birds;
@@ -109,11 +109,11 @@ switch(getInput()) {
         echo ">";
 
         $query = new Query();
+
         switch(getInput()){
             case "S":
                 echoArray($query->newQuery($stateDataInstance->list_of_states));
                 break;
-
             case "B":
                 echoArray($query->newQuery($stateDataInstance->list_of_birds));
                 break;
@@ -121,7 +121,6 @@ switch(getInput()) {
                 echoArray($query->newQuery($stateDataInstance->list_of_capitals));
                 break;
         } 
-
         break;
     case "G":
         playGame();
@@ -130,8 +129,9 @@ switch(getInput()) {
         echo `clear`;
         $exit = true;
         break;    
-}// list_or_search switch
+}
 
 }while($exit == false);
+
 exit(0);
 ?>
