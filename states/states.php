@@ -19,13 +19,20 @@
  * 4. "What is the state bird of California?"
  */
 
+require_once('smart_io.php');
+include_once('state_trivia_game.php');
+
 class StateData {
     public $states_data_file;
     public $all_state_data;
+    public $list_of_states;
+    public $list_of_birds;
+    public $list_of_capitals;
 
     function __construct($states_data_file){
         $this->states_data_file = $states_data_file;
-        $this->loadStateData();
+        $this->all_state_data = $this->loadStateData();
+        $this->parseStateData($this->all_state_data);
     } 
 
     function loadStateData() {
@@ -41,46 +48,38 @@ class StateData {
         }
 
         fclose($handle);
-        $this->all_state_data = $state_data;
         return $state_data;
     }
 
-    function parseStateData($state_data, $mode = "S"){
-        $states = array();
-        $birds = array();
-        $capitals = array();
+    function parseStateData($state_data){
 
         foreach($state_data as $key => $value){
             foreach($value as $key2=>$value2){
                 if($key2 == 0){
-                    $states[] = $value2;
+                    $this->list_of_states[] = $value2;
                 }
                 elseif($key2 == 1){
-                    $capitals[] = $value2 . ', ' . $value[$key2 - 1];
+                    $this->list_of_capitals[] = $value2 . ', ' . $value[$key2 - 1];
                 }
                 elseif($key2 == 2){
-                    $birds[] = $value[$key2 - 2] . ': ' . $value2;
+                    $this->list_of_birds[] = $value[$key2 - 2] . ': ' . $value2;
                 }
             }
         }
-
-        if($mode == "S") {return $states;}
-        if($mode == "B") {return $birds;}
-        if($mode == "C") {return $capitals;}
     }
 }
 
-class Search
+class Query
 {
-    public function newSearch($mode, $data){
+    public function newQuery($sourceArray){
         echo "Enter a letter >";
         $first_letter = getInput();
-        return $this->doSearch($first_letter, $mode, $data); 
+        return $this->doSearch($first_letter, $sourceArray); 
     }
 
-    private function doSearch($first_letter, $mode, $data){
+    private function doSearch($first_letter, $sourceArray){
         $results = array();
-        foreach($data as $key=>$value){
+        foreach($sourceArray as $key=>$value){
             if($value[0] == $first_letter){
                 $results[] = $value;
             }
@@ -89,63 +88,48 @@ class Search
     }
 }
 
-function echoArray($array){
-    foreach($array as $key=>$value){
-        echo $value . PHP_EOL;
-    }
-}
-
-function getInput(){
-   $input = trim(strtoupper(fgets(STDIN)));
-   return substr($input, 0);
-}
-
 define('STATE_DATA_FILE', 'states.txt');
-
 $stateDataInstance = new StateData(STATE_DATA_FILE);
-//$state_data = $stateDataInstance->loadStateData();
-$all_state_data = $stateDataInstance->all_state_data;
-
 $exit = false;    
+
 do {
-echo "=================================================================" . PHP_EOL;    
-echo "| (L)ist States   (S)earch State Data  (Q)uit |" . PHP_EOL;
-echo "-----------------------------------------------" . PHP_EOL;
+echo PHP_EOL . "=================================================================" . PHP_EOL;    
+echo "   (L)ist States   (S)earch State Data   Trivia (G)ame   (Q)uit    " . PHP_EOL;
+echo "-----------------------------------------------------------------" . PHP_EOL;
 echo ">";
 
-$list_or_search = trim(strtoupper(fgets(STDIN)));
+$list_or_search = getInput();
 
 switch($list_or_search) {
     case "L":
         echo `clear`;
-        $list_of_states = $stateDataInstance->parseStateData($all_state_data);
-        echoArray($list_of_states);
+        echoArray($stateDataInstance->list_of_states);
         break;
     case "S":
         echo `clear`; 
         echo "(S)tates   (B)irds   (C)apitals" . PHP_EOL;
         echo ">";
 
-        $search = new Search();
+        $query = new Query();
         $search_birds_or_capitals = getInput();
-
+        var_dump($search_birds_or_capitals);
         switch($search_birds_or_capitals){
             case "S":
-                $list_of_states = $stateDataInstance->parseStateData($all_state_data);
-                echoArray($search->newSearch("S", $list_of_states));
+                echoArray($query->newQuery($stateDataInstance->list_of_states));
                 break;
 
             case "B":
-                $birds = $stateDataInstance->parseStateData($all_state_data, "B");
-                echoArray($search->newSearch("B", $birds));
+                echoArray($query->newQuery($stateDataInstance->list_of_birds));
                 break;
             case "C":
-                $capitals = $stateDataInstance->parseStateData($all_state_data, "C");
-                echoArray($search->newSearch("C", $capitals));    
+                echoArray($query->newQuery($stateDataInstance->list_of_capitals));
                 break;
         } 
 
         break;
+    case "G":
+        playGame();
+        break;    
     case "Q":
         echo `clear`;
         $exit = true;
