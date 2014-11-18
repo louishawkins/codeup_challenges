@@ -35,7 +35,7 @@ class StateData {
         $this->parseStateData($this->all_state_data);
     } 
 
-    function loadStateData() {
+    private function loadStateData() {
         // load the contents of the states data file into an array
         $state_data = array();
         $filesize = filesize($this->states_data_file);
@@ -51,7 +51,7 @@ class StateData {
         return $state_data;
     }
 
-    function parseStateData($state_data){
+    private function parseStateData($state_data){
 
         foreach($state_data as $key => $value){
             foreach($value as $key2=>$value2){
