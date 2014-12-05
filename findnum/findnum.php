@@ -1,7 +1,7 @@
 <?php
 /* Write a function. What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?*/
 
-/*
+
 //This algorithm works well for small numbers but rapidly becomes untractable after 18.
 function findNum($max){
 	$i = 1;
@@ -11,8 +11,7 @@ function findNum($max){
 		$check = $i % $n == 0 ? true : false;
 		if ($check){
 			$n++;
-		}
-		else {
+		} else {
 			$n = 1;
 			$i++;
 		}
@@ -21,7 +20,8 @@ function findNum($max){
 	echo "\nThe smallest number evenly divisible by {$max} is {$i}." . PHP_EOL;
 	return 0;
 }
-*/
+
+// This is a better way. Found soulution in C# online and transalted to PHP.
 $num = $argv[1];
 
 function gcd($a, $b)

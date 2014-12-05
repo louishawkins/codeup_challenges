@@ -147,18 +147,14 @@ if($dealerTotal < 17){
 
   if($playerTotal > 21) {
       echo "\nYou exceeded 21, busted.\n";
-  }
-  elseif ($playerTotal == 21) {
+  } elseif ($playerTotal == 21) {
       echo "\nTWENTY-ONE!!!\n";
-  }
-  elseif ($playerTotal < 21 && $playerTotal > $dealerTotal) {
+  } elseif ($playerTotal < 21 && $playerTotal > $dealerTotal) {
       echo "\nYou beat the dealer, you win!\n";
-  }
-  elseif ($playerTotal < 21 && $playerTotal < $dealerTotal) {
+  } elseif ($playerTotal < 21 && $playerTotal < $dealerTotal) {
       echo "\nThe dealer beat you!\n";
-  }
-  else {
-    echo "blah";
+  } else {
+    echo "You broke the game.";
   }
 
 // if neither of the above are true, then the dealer needs to draw more cards
